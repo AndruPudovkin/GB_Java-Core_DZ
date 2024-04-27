@@ -1,0 +1,4 @@
+FROM openjdk:21
+WORKDIR /usr/src/app
+COPY out/artifacts/DZ_lesson1_jar/DZ_lesson1.jar .
+CMD ["java", "-jar", "DZ_lesson1.jar"]

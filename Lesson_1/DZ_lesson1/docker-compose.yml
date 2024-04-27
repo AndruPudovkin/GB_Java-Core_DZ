@@ -1,0 +1,22 @@
+version: '3.4'
+
+services:
+  employeeJava-app:
+    image: employee-image
+    container_name: employee-container
+    build:
+      context: .
+      dockerfile: Dockerfile-employee
+    depends_on:
+      - employeeMysql-db
+
+
+
+  employeeMysql-db:
+    image: mysql:latest
+    container_name: mysql_db-container
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=employeesDb
+    ports:
+      - 5001:3306
