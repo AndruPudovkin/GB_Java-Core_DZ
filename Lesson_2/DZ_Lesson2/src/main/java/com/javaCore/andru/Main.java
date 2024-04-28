@@ -8,7 +8,7 @@ public class Main {
 
     private static Scanner scanner = new Scanner(System.in);
     private static Random random = new Random();
-    private static final int WIN_COUNT = 3;
+    private static final int WIN_COUNT = 2;
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = '0';
     private static final char DOT_EMPTY = '*';
@@ -18,31 +18,48 @@ public class Main {
 
 
     public static void main(String[] args) {
-        while (true) {
+//        while (true) {
+//            initialize();
+//            printField();
+//            while (true) {
+//                humanTurn();
+//                printField();
+//                if (checkState(DOT_HUMAN, "Вы победили!"))
+//                    break;
+//                aiTurn();
+//                printField();
+//                if (checkState(DOT_AI, "Победил компьютер!"))
+//                    break;
+//            }
+//            System.out.println("Хотите сыграть еще? - (Y-да) .....");
+//            if (!scanner.next().equalsIgnoreCase("y"))
+//                break;
+//        }
+        while (true){
             initialize();
             printField();
             while (true) {
                 humanTurn();
                 printField();
-                if (checkState(DOT_HUMAN, "Вы победили!"))
-                    break;
-                aiTurn();
-                printField();
-                if (checkState(DOT_AI, "Победил компьютер!"))
-                    break;
+                System.out.println(checkStateTest(DOT_HUMAN, "Вы победили!", WIN_COUNT));
+//                if (checkStateTest(DOT_HUMAN, "Вы победили!", WIN_COUNT))
+//                    break;
+//                aiTurn();
+//                printField();
+//                if (checkStateTest(DOT_AI, "Победил компьютер!", WIN_COUNT))
+//                    break;
             }
-            System.out.println("Хотите сыграть еще? - (Y-да) .....");
-            if (!scanner.next().equalsIgnoreCase("y"))
-                break;
         }
+
+
     }
 
     /**
      * Создание пустого игрового поля
      */
     static void initialize(){
-        fieldSizeX = 3;
-        fieldSizeY = 3 ;
+        fieldSizeX = 5;
+        fieldSizeY = 5 ;
         field = new char[fieldSizeX][fieldSizeY];
         for (int x = 0; x < fieldSizeX; x++) {
             for (int y = 0; y < fieldSizeY; y++) {
@@ -94,6 +111,8 @@ public class Main {
         }while (!isCellValid(x,y) || !isCellEmpty(x,y));
         field[x][y] = DOT_HUMAN;
 
+        System.out.println(check2(x,y,DOT_HUMAN,WIN_COUNT));
+
     }
 
     /**
@@ -107,7 +126,6 @@ public class Main {
              y = random.nextInt(fieldSizeY);
         }while (!isCellEmpty(x,y));
         field[x][y] = DOT_AI;
-
     }
 
     /**
@@ -164,12 +182,61 @@ public class Main {
     }
 
     /**
+     * Проверка условий победы по горизонтали
+     * @param x коардинана точки Х
+     * @param y коардинана точки У
+     * @param dot вишка игрока
+     * @param win исловие победы
+     * @return
+     */
+    static boolean check1(int x, int y, char dot, int win){
+        int count = 0;
+        for (int i = y; i < fieldSizeX-1; i++) {
+            if (field[x][i] == dot && field[x][i+1] == dot){
+                count++;
+            }
+        }
+        if (count == win)return true;
+        return false;
+    }
+
+    /**
+     * Проверка условий победы по вертикали
+     * @param x коардинана точки Х
+     * @param y коардинана точки У
+     * @param dot вишка игрока
+     * @param win исловие победы
+     * @return
+     */
+    static boolean check2(int x, int y, char dot, int win){
+        int count = 0;
+        for (int i = x; i < fieldSizeY-1; i++) {
+            if (field[i][y] == dot && field[i+1][y] == dot ){
+               count = count +1;
+            }
+        }
+        if (count == win-1)return true;
+        return false;
+    }
+
+    /**
+     * * Проверка условий победы по горизонтали
+     * @param x коардинана точки Х
+     * @param y коардинана точки У
+     * @param dot вишка игрока
+     * @param win исловие победы
+     * @return
+     */
+    static boolean check3(int x, int y, char dot, int win){
+       return false;
+    }
+
+    /**
      * Проверка состояния игры
      * @param dot фишка игрока
      * @param s сообщение победы
      * @return
      */
-
     static boolean checkState(char dot, String s){
         if (checkWin(dot)){
             System.out.println(s);
@@ -181,6 +248,15 @@ public class Main {
         return false;
     }
 
+    static boolean checkStateTest(char dot, String s, int win){
+        for (int x = 0; x < field.length; x++) {
+            for (int y = 0; y < field.length; y++) {
+                if (check3(x,y,dot,win))return true;
+            }
+        }
+
+        return false;
+    }
 
 
 }
