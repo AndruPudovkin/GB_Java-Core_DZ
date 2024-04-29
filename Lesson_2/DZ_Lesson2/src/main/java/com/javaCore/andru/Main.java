@@ -8,7 +8,7 @@ public class Main {
 
     private static Scanner scanner = new Scanner(System.in);
     private static Random random = new Random();
-    private static final int WIN_COUNT = 2;
+    private static final int WIN_COUNT = 3;
     private static final char DOT_HUMAN = 'X';
     private static final char DOT_AI = '0';
     private static final char DOT_EMPTY = '*';
@@ -18,36 +18,43 @@ public class Main {
 
 
     public static void main(String[] args) {
+        /**
+         * Task 1 - ok
+         */
+
 //        while (true) {
-//            initialize();
-//            printField();
-//            while (true) {
-//                humanTurn();
-//                printField();
-//                if (checkState(DOT_HUMAN, "Вы победили!"))
-//                    break;
-//                aiTurn();
-//                printField();
-//                if (checkState(DOT_AI, "Победил компьютер!"))
-//                    break;
-//            }
-//            System.out.println("Хотите сыграть еще? - (Y-да) .....");
-//            if (!scanner.next().equalsIgnoreCase("y"))
-//                break;
-//        }
+////            initialize();
+////            printField();
+////            while (true) {
+////                humanTurn();
+////                printField();
+////                if (checkState(DOT_HUMAN, "Вы победили!"))
+////                    break;
+////                aiTurn();
+////                printField();
+////                if (checkState(DOT_AI, "Победил компьютер!"))
+////                    break;
+////            }
+////            System.out.println("Хотите сыграть еще? - (Y-да) .....");
+////            if (!scanner.next().equalsIgnoreCase("y"))
+////                break;
+////        }
+
+        /**
+         * Task 2 - ok
+         */
         while (true){
             initialize();
             printField();
             while (true) {
                 humanTurn();
                 printField();
-                System.out.println(checkStateTest(DOT_HUMAN, "Вы победили!", WIN_COUNT));
-//                if (checkStateTest(DOT_HUMAN, "Вы победили!", WIN_COUNT))
-//                    break;
-//                aiTurn();
-//                printField();
-//                if (checkStateTest(DOT_AI, "Победил компьютер!", WIN_COUNT))
-//                    break;
+                if (checkStateTask2(DOT_HUMAN, "Вы победили!", WIN_COUNT))
+                    break;
+                aiTurn();
+                printField();
+                if (checkStateTask2(DOT_AI, "Победил компьютер!", WIN_COUNT))
+                    break;
             }
         }
 
@@ -111,7 +118,7 @@ public class Main {
         }while (!isCellValid(x,y) || !isCellEmpty(x,y));
         field[x][y] = DOT_HUMAN;
 
-        System.out.println(check2(x,y,DOT_HUMAN,WIN_COUNT));
+//        System.out.println(check3(x,y,DOT_HUMAN,WIN_COUNT));
 
     }
 
@@ -196,7 +203,7 @@ public class Main {
                 count++;
             }
         }
-        if (count == win)return true;
+        if (count == win-1)return true;
         return false;
     }
 
@@ -220,7 +227,7 @@ public class Main {
     }
 
     /**
-     * * Проверка условий победы по горизонтали
+     * * Проверка условий победы по диоганали (прямой (а[2][1] а[3][2] а[4][3]
      * @param x коардинана точки Х
      * @param y коардинана точки У
      * @param dot вишка игрока
@@ -228,8 +235,48 @@ public class Main {
      * @return
      */
     static boolean check3(int x, int y, char dot, int win){
-       return false;
+        int count = 0;
+        int c = 0;
+        int t = 0;
+        while (!(c == win)){
+            if (x+t >= fieldSizeX || y+t >= fieldSizeY){
+                break;
+            }
+            if (field[x][y]==dot && field[x+t][y+t]==dot){
+                count++;
+            }
+            t++;
+            c++;
+        }
+        if (count == win)return true;
+        return false;
     }
+
+    /**
+     * * Проверка условий победы по диоганали (прямой (а[2][1] а[3][2] а[4][3]
+     * @param x коардинана точки Х
+     * @param y коардинана точки У
+     * @param dot вишка игрока
+     * @param win исловие победы
+     * @return
+     */
+    static boolean check4(int x, int y, char dot, int win){
+        int count = 0;
+        int c = 0;
+        int t = 0;
+        while (!(c == win)){
+            if (!(x+t >= fieldSizeX || y-t < 0)){
+                if (field[x+t][y-t]==dot){
+                    count++;
+                }
+            }
+            t++;
+            c++;
+        }
+        if (count == win)return true;
+        return false;
+    }
+
 
     /**
      * Проверка состояния игры
@@ -248,13 +295,27 @@ public class Main {
         return false;
     }
 
-    static boolean checkStateTest(char dot, String s, int win){
+    static boolean checkStateTask2(char dot, String s, int win){
         for (int x = 0; x < field.length; x++) {
             for (int y = 0; y < field.length; y++) {
-                if (check3(x,y,dot,win))return true;
+                if (check1(x,y,dot,win)){
+                    System.out.println(s);
+                    return true;
+                }
+                if (check2(x,y,dot,win)){
+                    System.out.println(s);
+                    return true;
+                }
+                if (check3(x,y,dot,win)){
+                    System.out.println(s);
+                    return true;
+                }
+                if (check4(x,y,dot,win)){
+                    System.out.println(s);
+                    return true;
+                }
             }
         }
-
         return false;
     }
 
