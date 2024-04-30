@@ -51,7 +51,7 @@ public class Main {
                 printField();
                 if (checkStateTask2(DOT_HUMAN, "Вы победили!", WIN_COUNT))
                     break;
-                aiTurn();
+                aiTurnTask3();
                 printField();
                 if (checkStateTask2(DOT_AI, "Победил компьютер!", WIN_COUNT))
                     break;
@@ -117,9 +117,6 @@ public class Main {
             y = scanner.nextInt() - 1;
         }while (!isCellValid(x,y) || !isCellEmpty(x,y));
         field[x][y] = DOT_HUMAN;
-
-//        System.out.println(check3(x,y,DOT_HUMAN,WIN_COUNT));
-
     }
 
     /**
@@ -133,6 +130,36 @@ public class Main {
              y = random.nextInt(fieldSizeY);
         }while (!isCellEmpty(x,y));
         field[x][y] = DOT_AI;
+    }
+
+    /**
+     * Ход компьютера задача 3
+     */
+    static void aiTurnTask3(){
+        char dot = DOT_HUMAN;
+        int win = WIN_COUNT-1;
+        boolean check = true;
+        for (int x = 0; x < field.length; x++) {
+            for (int y = 0; y < field.length; y++) {
+                if (isCellEmpty(x,y) && check) {
+                    field[x][y] = dot;
+                    if (check1(x, y, dot, win)) {
+                        field[x][y] = DOT_AI;
+                        check = false;
+                    }else if (check2(x, y, dot, win)) {
+                        field[x][y] = DOT_AI;
+                        check = false;
+                    }else if(check3(x, y, dot, win)) {
+                        field[x][y] = DOT_AI;
+                        check = false;
+                    }else if (check4(x, y, dot, win)) {
+                        field[x][y] = DOT_AI;
+                        check = false;
+                    }else field[x][y]=DOT_EMPTY;
+                }
+            }
+        }
+        if (check) aiTurn();
     }
 
     /**
@@ -219,7 +246,7 @@ public class Main {
         int count = 0;
         for (int i = x; i < fieldSizeY-1; i++) {
             if (field[i][y] == dot && field[i+1][y] == dot ){
-               count = count +1;
+               count++;
             }
         }
         if (count == win-1)return true;
@@ -302,11 +329,11 @@ public class Main {
                     System.out.println(s);
                     return true;
                 }
-                if (check2(x,y,dot,win)){
+                if (check2(x,y,dot,win+1)){
                     System.out.println(s);
                     return true;
                 }
-                if (check3(x,y,dot,win)){
+                if (check3(x,y,dot,win+1)){
                     System.out.println(s);
                     return true;
                 }
